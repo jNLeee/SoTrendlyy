@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>SoTrendly</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+		<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" href="img/Graph_icon.png" />
+  </head>
+  <body>
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#"><img src="img/Map_icon.png"></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item" >
+						<a class="nav-link" href="#slides">Home</a>
+					</li>
+					<li class="nav-item" >
+						<a class="nav-link" href="#gettingStarted">Getting Started</a>
+          </li>
+          <li class="nav-item" >
+						<a class="nav-link" href="#about">About</a>
+					</li>
+					<li class="nav-item" >
+						<a class="nav-link" href="#connect">Connect</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+  </nav>
+  
+  <!-- Settings Selection Bar-->
+  <button class="collapsible">Settings</button>
+	<div class="content">
+		<button onclick="searchOptionOne()">Color Blindness</button>
+  </div>
+  
+  <script>
+		var coll = document.getElementsByClassName("collapsible");
+		var i;
+		for (i = 0; i < coll.length; i++) {
+			coll[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.maxHeight){
+					content.style.maxHeight = null;
+				} else {
+					content.style.maxHeight = content.scrollHeight + "px";
+				} 
+			});
+		}
+
+		function searchOptionOne() {
+  			document.getElementById("demo").innerHTML = "Search Option One";
+		}
+	</script>
+
+  <!-- Text to Speech Option-->
+  <h1>Speech Tester</h1>
+
+  <p id="paragraph">Press the "play" button to hear this text.</p>
+  
+  <form>
+  <div class="controls">
+    <button id="play" type="submit">Play</button>
+  </div>
+  </form>
+
+  <script>
+    var synth = window.speechSynthesis;
+
+    // for play button
+    var inputForm = document.querySelector('form');
+
+    // adds text from certain id to inputTxt var to be read
+    var inputTxt = document.querySelector('#paragraph').innerHTML; // must be plain text
+
+    // This block makes array of all possible voices to choose from (manually set to Google US here)
+    var voices = [];
+
+    function populateVoiceList() {
+      voices = synth.getVoices().sort(function (a, b) {
+          const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+          if ( aname < bname ) return -1;
+          else if ( aname == bname ) return 0;
+          else return +1;
+      });
+    }
+
+    populateVoiceList();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+
+    // This block outputs the audio when "Play" is pressed
+    function speak(){
+        if (synth.speaking) {
+            console.error('speechSynthesis.speaking');
+            return;
+        }
+        if (inputTxt !== '') {
+        var utterThis = new SpeechSynthesisUtterance(inputTxt);
+        for(i = 0; i < voices.length ; i++) {
+          if(voices[i].name === 'Google US English') {
+            utterThis.voice = voices[i];
+            break;
+          }
+        }
+        utterThis.pitch = 1;
+        utterThis.rate = 1;
+        synth.speak(utterThis);
+      }
+    }
+
+    inputForm.onsubmit = function(event) {
+      event.preventDefault();
+      speak();
+    }
+  </script>
+
+  <!--- Selectable Social Media Buttons -->
+  <div class="col-12">
+    <button onclick="stopTwitterDisplay()"><input type="image" src="img/Twitter_icon.png" /></button>
+    <button onclick="stopYoutubeDisplay()"><input type="image" src="img/Youtube_icon.png" /></button>
+  
+    <div class="row">
+      <div id="twitter">
+        <div class="col-md-3">
+          This is twitter.
+        </div>
+      </div>
+      <div id="youtube">
+        <div class="col-md-3">
+          <div id="youtube-display"></div>
+        </div>
+      </div>
+    </div>
+  
+    <script>
+      function stopTwitterDisplay() {
+        var x = document.getElementById("twitter");
+        // document.getElementById("demo").innerHTML = "REMOVE TWITTER";
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+      function stopYoutubeDisplay() {
+        var x = document.getElementById("youtube");
+        // document.getElementById("demo").innerHTML = "REMOVE YOUTUBE";
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
+  </div> 
+
+  <!--- Welcome Jumbotron -->
+	<div class="container-fluid">
+		<div class="row jumbotron">
+			<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+				<p class="lead">Welcome to SoTrendly! Click on a US state on the map above and type in a key word you would like to see a trend about!
+				</p>
+			</div>
+		</div>
+	</div>
+
+  <!--- Getting Started Section -->
+  <div class="container-fluid padding">
+    <div class="row welcome text-center">
+      <div class="col-12">
+        <h1 id="gettingStarted" class="display-4">Getting Started...</h1>
+      </div>
+      <hr>
+      <div class="col-12">
+        <p class="lead">SoTrendly is a one-stop-shop for all of your social media needs. By entering a trend, you will have access to useful 
+          information about the trend specific to location, as well as direct access to posts that contain the trend. SoTrendly is currently 
+          implemented for Facebook, Twitter, and Youtube so the information provided will be reflective of them.
+        </p>
+        <p>
+          To get started, simply type in a trend and select a location. SoTrendly will then provide you accurate statistics about that trend 
+          in that specific location, polled directly from the provided social media platforms. Below you will find a scrollable list of posts 
+          that are associated with the trend. You can click on any of the social media providers to deselect them from the list.
+        </p>
+      </div>
+    </div>
+  </div>  
+
+  <!--- About Section -->
+  <div class="container-fluid padding">
+    <div class="row welcome text-center">
+      <div class="col-12">
+        <h1 id="about" class="display-4">Meet the Team</h1>
+      </div>
+      <hr>
+    </div>
+  </div>
+
+  <!--- About us Cards -->
+  <div class="container-fluid padding">
+    <div class="row padding">
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="img/Will's_CardPic.jpg" class="card-img">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Will Thomas</h5>
+              <p class="card-text">Howdy, thanks for using our site! My name is Will Thomas and I am a junior computer science major at Texas A&M University. 
+                I have worked on many projects in both leadership and general team positions, most notably in games. My hobbies include making games, obviously, 
+                but also playing guitar, piano, and drawing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="img/Ricky's_CardPic.jpg" class="card-img">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Ricky Bengani</h5>
+              <p class="card-text">Howdy! I am currently a Junior studying computer science. At Texas A&M, I have been involved with organizations 
+                like Student Engineers’ Council, TAMUhack, and Toastmasters. I enjoy working on my own projects to learn new technologies and become 
+                a versatile software engineer. Aside from computer science and academics, some of my hobbies include videography, photography, and running.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="img/Justin's_CardPic.jpg" class="card-img">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Justin Lee</h5>
+              <p class="card-text">Howdy! I am an aspiring software developer that is currently studying at Texas A&M University. I am in the Class 
+                of 2022 and hope to continue to grow my career as a programmer moving forward. I love cooking, trying new places to eat, and gaming.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="img/Clint's_CardPic.png" class="card-img">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Clint Hastings</h5>
+              <p class="card-text">I'm a hard-working, results-driven, computer science student at Texas A&M University with a diverse background. At 
+                Texas A&M alone, I've participated in Aggie Coding Club, Aggie Outdoors, Symphonic Winds Performance Ensemble, Hullabaloo Band, 
+                Trombone Choir, and Freshman Reaching Excellence in Engineering - all while excelling in my coursework.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="img/Tony's_CardPic.jpg" class="card-img">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Tony Qing</h5>
+              <p class="card-text">Howdy, I am a Junior studying Computer Science at Texas A&M University. My favorite thing about this major is it's
+                easy to find resources online and I enjoy working in team environments. One of my main goals is to become a proficient software 
+                engineer who can tackle any problem with ease. Outside of school I like to cook, gaming with friends, and watching YouTube videos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+	<!--- Connect -->
+  <div class="container-fluid padding">
+    <div class="row text-center padding">
+      <div class="col-12">
+        <h2 id="connect">Connect</h2>
+      </div>
+      <!--- Justin's Contact -->
+      <div class="col-6 social padding">
+        <a href="https://www.linkedin.com/in/justin-lee-6b6350184/"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:jlee232435@gmail.com"><i class="far fa-envelope"></i></a>
+        <a href="https://github.com/jNLeee"><i class="fab fa-github"></i></a>
+      </div>
+      <!--- Will's Contact -->
+      <div class="col-6 social padding">
+        <a href="https://www.linkedin.com/in/willthomaspierce/"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:willthomaspierce@tamu.edu"><i class="far fa-envelope"></i></a>
+        <a href="https://github.com/geirgie25"><i class="fab fa-github"></i></a>
+      </div>
+      <!--- Clint's Contact -->
+      <div class="col-6 social padding">
+        <a href="https://www.linkedin.com/in/clinton-hastings/"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:clin10@tamu.edu"><i class="far fa-envelope"></i></a>
+        <a href="https://github.com/megaclin10"><i class="fab fa-github"></i></a>
+      </div>
+      <!--- Tony's Contact -->
+      <div class="col-6 social padding">
+        <a href="https://www.linkedin.com/in/tony-qing-123600192/"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:tony.qing@tamu.edu"><i class="far fa-envelope"></i></a>
+        <a href="https://github.com/cookmcbook"><i class="fab fa-github"></i></a>
+      </div>
+      <!--- Ricky's Contact -->
+      <div class="col-6 social padding">
+        <a href="https://www.linkedin.com/in/rickybengani/"><i class="fab fa-linkedin"></i></a>
+        <a href="mailto:mxb0417@tamu.edu"><i class="far fa-envelope"></i></a>
+        <a href="https://github.com/rickybengani"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </div>
+
+	<!--- Footer -->
+  <footer>
+    <div class="container-fluid padding">
+      <div class="row text-center">
+        <div class="col-12">
+          <h5>Copyright &copy; 2020 SoTrendly</h5>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </body>
+</html>
